@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject, input, OnInit, signal } from '@angular/core';
+import { TareasService } from '../../services/tareas-service';
+import { ObtenerTareas } from '../../models/obtener-tareas';
 
 @Component({
   selector: 'app-tarea-card',
@@ -7,6 +9,5 @@ import { Component } from '@angular/core';
   styleUrl: './tarea-card.css',
 })
 export class TareaCard {
-
-  
+tarea = input.required<ObtenerTareas>();
 }

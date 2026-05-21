@@ -5,6 +5,6 @@ export interface CrearTarea {
     estadosTarea?: number,
     estaEliminado?: boolean,
     tiposTarea?: number,
-    idUsuarioDeLaTarea: number,
-    idEspacioDeTrabajo: number
+    idUsuarioDeLaTarea?: number,
+    idEspacioDeTrabajo?: number
 }

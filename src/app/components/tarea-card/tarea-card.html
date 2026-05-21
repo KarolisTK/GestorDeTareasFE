@@ -1,4 +1,4 @@
-<div class="bg-gradient-to-br from-amber-700 to-amber-950 w-full sm:w-80 p-5 h-60 shadow-md relative rounded-xl overflow-hidden">
+<div class="bg-linear-to-r from-amber-700 to-amber-950 w-full sm:w-80 p-5 h-60 shadow-md relative rounded-xl overflow-hidden mb-4">
 
   <button class="bg-orange-400/20 text-orange-300 border border-orange-400/30 rounded-xl px-3 py-1 absolute top-4 right-4 text-xs font-medium">
     4.5
@@ -21,11 +21,10 @@
     </svg>
   </div>
 
-  <p class="text-base font-semibold text-amber-200">Chem</p>
+  <p class="text-base font-semibold text-amber-200">{{tarea().nombreTarea}}</p>
 
   <p class="text-xs mt-1.5 font-mono text-amber-400/80 leading-relaxed line-clamp-3">
-    branch of science that examines the compounds made of atoms, molecules, and the properties and
-    behavior of materials and the effect of materials on each other....
+    {{tarea().descripcionTarea}}
   </p>
 
 </div>
