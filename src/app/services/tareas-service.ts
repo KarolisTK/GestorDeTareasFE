@@ -25,4 +25,7 @@ export class TareasService {
   EditarTarea(dto: EditarTarea, idTarea: number) {
     return this.http.put(`${this.baseUrl}/Tareas/EditarTarea/${idTarea}`, dto);
   }
+  EliminarTarea(idTarea: number){
+    return this.http.delete(`${this.baseUrl}/Tareas/EliminarTarea/${idTarea}`);
+  }
 }

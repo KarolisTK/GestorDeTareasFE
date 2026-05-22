@@ -16,6 +16,7 @@ export class EditarTareaModal implements OnInit {
   @Input() idEspacioDeTrabajo!: number;
   @Output() cerrar = new EventEmitter<void>();
   @Output() tareaEditada = new EventEmitter<void>();
+  @Output() tareaEliminada = new EventEmitter<void>();
 
   nombreTarea = '';
   descripcionTarea = '';
@@ -29,7 +30,7 @@ export class EditarTareaModal implements OnInit {
   ngOnInit() {
     this.nombreTarea = this.tarea.nombreTarea;
     this.descripcionTarea = this.tarea.descripcionTarea;
-    console.log(this.tarea)
+    console.log(this.tarea);
   }
 
   onOverlayClick(event: MouseEvent) {
@@ -64,5 +65,21 @@ export class EditarTareaModal implements OnInit {
         console.error(err);
       },
     });
+  }
+
+  onEliminar() {
+    if (confirm('¿Eliminar esta tarea?')) {
+      this.tareaService.EliminarTarea(this.tarea.idTarea).subscribe({
+        next: () => {
+          this.tareaEliminada.emit();
+          this.cerrar.emit();
+        },
+        error: (err) => {
+          this.cargando = false;
+          this.error = 'Error al eliminar la tarea.';
+          console.error(err);
+        },
+      });
+    }
   }
 }

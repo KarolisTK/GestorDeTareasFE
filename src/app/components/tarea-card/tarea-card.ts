@@ -15,6 +15,7 @@ export class TareaCard {
   
   modalEditarAbierto = signal(false);
   @Output() tareaEditada = new EventEmitter<void>();
+  @Output() tareaEliminada = new EventEmitter<void>();
   abrirModalEditar() {
     this.modalEditarAbierto.set(true);
   }
@@ -23,5 +24,8 @@ export class TareaCard {
   }
   onTareaEditada() {
     this.tareaEditada.emit();
+  }
+  onTareaEliminada(){
+    this.tareaEliminada.emit();
   }
 }
