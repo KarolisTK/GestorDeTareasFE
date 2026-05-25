@@ -1,5 +1,8 @@
 export interface EditarTarea {
-    nombreTarea: string,
-    descripcionTarea: string,
-    estadosTarea: number
+  nombreTarea:        string;
+  descripcionTarea:   string;
+  estadosTarea:       number;
+  tiposTarea:         number;
+  idUsuarioDeLaTarea: number;
 }
+ 

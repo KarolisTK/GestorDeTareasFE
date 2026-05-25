@@ -41,7 +41,7 @@
           enProgreso()
         }}</span>
       </div>
-      <div class="flex-1 overflow-y-auto px-4 py-2">
+      <div class="flex-1 overflow-y-auto flex flex-col items-center py-2 scrollbar-hide">
         @for (tarea of tareas().filter((t) => t.estadosTarea === 1); track tarea.idTarea) {
           <app-tarea-card [tarea]="tarea" (tareaEditada)="onTareaCreada()" (tareaEliminada)="onTareaCreada()" />
         }
@@ -61,7 +61,7 @@
           completadas()
         }}</span>
       </div>
-      <div class="flex-1 overflow-y-auto px-4 py-2">
+      <div class="flex-1 overflow-y-auto flex flex-col items-center py-2 scrollbar-hide">
         @for (tarea of tareas().filter((t) => t.estadosTarea === 3); track tarea.idTarea) {
           <app-tarea-card [tarea]="tarea" (tareaEditada)="onTareaCreada()" (tareaEliminada)="onTareaCreada()"/>
         }

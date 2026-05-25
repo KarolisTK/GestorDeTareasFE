@@ -1,23 +1,22 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { Usuarioservice } from '../../services/usuarioservice';
 import { CrearUsuario } from '../../models/crear-usuario';
-import { RouterLink, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-registro',
-  standalone: true,
-  imports: [RouterModule, RouterLink, FormsModule],
+  imports: [RouterLink, FormsModule],
   templateUrl: './register.html',
 })
 export class RegistroComponent {
+  private usuarioService = inject(Usuarioservice);
+
   dto: CrearUsuario = {
-    nombreUsuario: '',
-    correoUsuario: '',
+    nombreUsuario:    '',
+    correoUsuario:    '',
     contrasenaUsuario: '',
   };
-
-  constructor(private usuarioService: Usuarioservice) {}
 
   onSubmit() {
     this.usuarioService.crear(this.dto).subscribe({

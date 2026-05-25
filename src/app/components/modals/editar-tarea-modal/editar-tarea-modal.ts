@@ -1,37 +1,32 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, inject, input, OnInit, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TareasService } from '../../../services/tareas-service';
-import { EditarTarea } from '../../../models/editar-tarea';
 import { ObtenerTareas } from '../../../models/obtener-tareas';
+import { EditarTarea } from '../../../models/editar-tarea';
 
 @Component({
   selector: 'app-editar-tarea-modal',
-  imports: [CommonModule, FormsModule],
+  imports: [FormsModule],
   templateUrl: './editar-tarea-modal.html',
   styleUrl: './editar-tarea-modal.css',
 })
 export class EditarTareaModal implements OnInit {
-  @Input() tarea!: ObtenerTareas;
-  @Input() idEspacioDeTrabajo!: number;
-  @Output() cerrar = new EventEmitter<void>();
-  @Output() tareaEditada = new EventEmitter<void>();
-  @Output() tareaEliminada = new EventEmitter<void>();
+  tarea = input.required<ObtenerTareas>();
 
-  nombreTarea = '';
+  cerrar         = output<void>();
+  tareaEditada   = output<void>();
+  tareaEliminada = output<void>();
+
+  nombreTarea      = '';
   descripcionTarea = '';
-  estadosTarea = 0;
-  cargando = false;
-  error = '';
+  cargando         = false;
+  error            = '';
 
-  constructor(private tareaService: TareasService) {
-    console.log('modal creado');
-  }
+  private tareaService = inject(TareasService);
 
   ngOnInit() {
-    this.nombreTarea = this.tarea.nombreTarea;
-    this.descripcionTarea = this.tarea.descripcionTarea;
-    console.log(this.tarea);
+    this.nombreTarea      = this.tarea().nombreTarea;
+    this.descripcionTarea = this.tarea().descripcionTarea;
   }
 
   onOverlayClick(event: MouseEvent) {
@@ -47,15 +42,18 @@ export class EditarTareaModal implements OnInit {
     }
 
     this.cargando = true;
-    this.error = '';
+    this.error    = '';
 
+    const t = this.tarea();
     const dto: EditarTarea = {
-      nombreTarea: this.nombreTarea.trim(),
-      descripcionTarea: this.descripcionTarea.trim(),
-      estadosTarea:this.estadosTarea
+      nombreTarea:        this.nombreTarea.trim(),
+      descripcionTarea:   this.descripcionTarea.trim(),
+      estadosTarea:       t.estadosTarea,
+      tiposTarea:         t.tiposTarea,
+      idUsuarioDeLaTarea: t.idUsuarioDeLaTarea,
     };
 
-    this.tareaService.EditarTarea(dto, this.tarea.idTarea).subscribe({
+    this.tareaService.EditarTarea(dto, t.idTarea).subscribe({
       next: () => {
         this.cargando = false;
         this.tareaEditada.emit();
@@ -63,25 +61,24 @@ export class EditarTareaModal implements OnInit {
       },
       error: (err) => {
         this.cargando = false;
-        this.error = 'Error al editar la tarea.';
+        this.error    = 'Error al editar la tarea.';
         console.error(err);
       },
     });
   }
 
   onEliminar() {
-    if (confirm('¿Eliminar esta tarea?')) {
-      this.tareaService.EliminarTarea(this.tarea.idTarea).subscribe({
-        next: () => {
-          this.tareaEliminada.emit();
-          this.cerrar.emit();
-        },
-        error: (err) => {
-          this.cargando = false;
-          this.error = 'Error al eliminar la tarea.';
-          console.error(err);
-        },
-      });
-    }
+    if (!confirm('¿Eliminar esta tarea?')) return;
+
+    this.tareaService.EliminarTarea(this.tarea().idTarea).subscribe({
+      next: () => {
+        this.tareaEliminada.emit();
+        this.cerrar.emit();
+      },
+      error: (err) => {
+        this.error = 'Error al eliminar la tarea.';
+        console.error(err);
+      },
+    });
   }
 }

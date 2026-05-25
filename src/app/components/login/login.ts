@@ -1,32 +1,28 @@
 import { Component, inject } from '@angular/core';
-import { Router, RouterLink, RouterModule } from '@angular/router';
-import { AuthService } from '../../services/auth-service';
-import { Logueo } from '../../models/login';
+import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../services/auth-service';
 
 @Component({
   selector: 'app-login',
-  imports: [RouterModule, RouterLink, FormsModule],
+  imports: [RouterLink, FormsModule],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
 export class Login {
-  private router = inject(Router);
+  private router      = inject(Router);
+  private authService = inject(AuthService);
 
-  constructor(private authService: AuthService) {}
-
-  dto: Logueo = {
-    correo: '',
-    contrasena: '',
-  };
+  correo    = '';
+  contrasena = '';
 
   onSubmit() {
-    this.authService.login(this.dto.correo, this.dto.contrasena).subscribe({
+    this.authService.login(this.correo, this.contrasena).subscribe({
       next: (res) => {
         localStorage.setItem('token', res.token);
         this.router.navigate(['/workspaces']);
       },
-      error: (err) => console.error('Error:', err),
+      error: (err) => console.error('Error login:', err),
     });
   }
 }

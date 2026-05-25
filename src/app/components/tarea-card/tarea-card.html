@@ -1,51 +1,38 @@
-<div
-  class="bg-linear-to-r from-amber-700 to-amber-950 w-full sm:w-80 p-5 h-60 shadow-md relative rounded-xl overflow-hidden mb-4"
->
+<div class="bg-linear-to-r from-amber-700 to-amber-950 w-full sm:w-80 p-5 h-60 shadow-md relative rounded-xl overflow-hidden mb-4">
+
   <button
-    (click)="abrirModalEditar()"
+    (click)="modalEditarAbierto.set(true)"
     class="bg-orange-400/20 text-orange-300 border border-orange-400/30 rounded-xl px-3 py-1 absolute top-4 right-4 text-xs font-medium"
   >
     Editar tarea
   </button>
 
   <div class="py-3 px-1">
-    <svg
-      class="w-9 h-9 text-orange-300"
-      stroke="currentColor"
-      stroke-width="1.5"
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0112 15a9.065 9.065 0 00-6.23-.693L5 14.5m14.8.8l1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0112 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5"
-        stroke-linejoin="round"
-        stroke-linecap="round"
-      />
+    <svg class="w-9 h-9 text-orange-300" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" fill="none">
+      <path d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0112 15a9.065 9.065 0 00-6.23-.693L5 14.5m14.8.8l1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0112 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5" stroke-linejoin="round" stroke-linecap="round"/>
     </svg>
   </div>
 
   <p class="text-base font-semibold text-amber-200">{{ tarea().nombreTarea }}</p>
+  <p class="text-xs mt-1.5 font-mono text-amber-400/80 leading-relaxed line-clamp-3">{{ tarea().descripcionTarea }}</p>
 
-  <p class="text-xs mt-1.5 font-mono text-amber-400/80 leading-relaxed line-clamp-3">
-    {{ tarea().descripcionTarea }}
-  </p>
   <select
-    [(ngModel)]="estadosTarea"
-    (ngModelChange)="onCambiarEstado()"
-    class="appearance-none bg-amber-950/60 text-amber-300 border border-amber-700/40 hover:border-amber-500/60 hover:bg-amber-900/60 rounded-xl pl-3 pr-8 py-1.5 text-xs font-medium cursor-pointer outline-none transition-all duration-200 focus:border-amber-500/50 focus:ring-1 focus:ring-amber-500/20"
+    [ngModel]="tarea().estadosTarea"
+    (ngModelChange)="cambiarEstado(+$event)"
+    class="appearance-none bg-amber-950/60 text-amber-300 border border-amber-700/40 hover:border-amber-500/60 rounded-xl pl-3 pr-8 py-1.5 text-xs font-medium cursor-pointer outline-none transition-all duration-200 absolute bottom-4 right-4"
   >
-    <option class="bg-amber-950 text-amber-200" [value]="0">⩒ Todo</option>
-    <option class="bg-amber-950 text-amber-200" [value]="1">⩒ Empezar</option>
-    <option class="bg-amber-950 text-amber-200" [value]="3">⩒ Terminar</option>
+    <option class="bg-amber-950 text-amber-200" [value]="0">⩒ Por empezar</option>
+    <option class="bg-amber-950 text-amber-200" [value]="1">⩒ En progreso</option>
+    <option class="bg-amber-950 text-amber-200" [value]="3">⩒ Completada</option>
   </select>
+
 </div>
 
 @if (modalEditarAbierto()) {
   <app-editar-tarea-modal
     [tarea]="tarea()"
-    (cerrar)="cerrarModalEditar()"
-    (tareaEditada)="onTareaEditada()"
-    (tareaEliminada)="onTareaEliminada()"
+    (cerrar)="modalEditarAbierto.set(false)"
+    (tareaEditada)="tareaEditada.emit()"
+    (tareaEliminada)="tareaEliminada.emit()"
   />
 }

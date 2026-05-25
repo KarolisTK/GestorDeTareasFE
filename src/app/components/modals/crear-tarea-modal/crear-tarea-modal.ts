@@ -1,28 +1,25 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, inject, input, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TareasService } from '../../../services/tareas-service';
 import { CrearTarea } from '../../../models/crear-Tarea';
 
 @Component({
   selector: 'app-crear-tarea-modal',
-  standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [FormsModule],
   templateUrl: './crear-tarea-modal.html',
 })
-export class CrearTareaModalComponent implements OnInit {
-  @Input() idEspacioDeTrabajo!: number;
-  @Output() cerrar = new EventEmitter<void>();
-  @Output() tareaCreada = new EventEmitter<void>();
+export class CrearTareaModalComponent {
+  idEspacioDeTrabajo = input.required<number>();
 
-  nombreTarea = '';
+  cerrar       = output<void>();
+  tareaCreada  = output<void>();
+
+  nombreTarea      = '';
   descripcionTarea = '';
-  cargando = false;
-  error = '';
+  cargando         = false;
+  error            = '';
 
-  constructor(private tareaService: TareasService) {}
-
-  ngOnInit() {}
+  private tareaService = inject(TareasService);
 
   onOverlayClick(event: MouseEvent) {
     if ((event.target as HTMLElement).classList.contains('modal-overlay')) {
@@ -37,16 +34,16 @@ export class CrearTareaModalComponent implements OnInit {
     }
 
     this.cargando = true;
-    this.error = '';
+    this.error    = '';
 
     const dto: CrearTarea = {
-      nombreTarea: this.nombreTarea.trim(),
-      descripcionTarea: this.descripcionTarea.trim(),
+      nombreTarea:        this.nombreTarea.trim(),
+      descripcionTarea:   this.descripcionTarea.trim(),
       fechaCreacionTarea: new Date(),
-      estadosTarea: 0,
-      estaEliminado: false,
-      tiposTarea: 0,
-      idEspacioDeTrabajo: this.idEspacioDeTrabajo,
+      estadosTarea:       0,
+      estaEliminado:      false,
+      tiposTarea:         0,
+      idEspacioDeTrabajo: this.idEspacioDeTrabajo(),
     };
 
     this.tareaService.AniadirNuevaTarea(dto).subscribe({
@@ -57,7 +54,7 @@ export class CrearTareaModalComponent implements OnInit {
       },
       error: (err) => {
         this.cargando = false;
-        this.error = 'Error al crear la tarea. Inténtalo de nuevo.';
+        this.error    = 'Error al crear la tarea. Inténtalo de nuevo.';
         console.error(err);
       },
     });

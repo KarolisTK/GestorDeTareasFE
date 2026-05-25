@@ -22,17 +22,19 @@ export class EspacioDeTrabajo {
   ngOnInit() {
     const id = Number(this.route.snapshot.queryParamMap.get('id'));
     this.idEspacio.set(id);
-    this.tareasService.obtenerTodasLasTareas(id).subscribe((data) => this.tareas.set(data));
+    this.cargarTareas(id);
   }
 
-  abrirModal() { this.modalAbierto.set(true); }
+  cargarTareas(id = this.idEspacio()) {
+    this.tareasService
+      .obtenerTodasLasTareas(id)
+      .subscribe((data) => this.tareas.set(data.sort((a, b) => a.idTarea - b.idTarea)));
+  }
+
+  abrirModal()  { this.modalAbierto.set(true); }
   cerrarModal() { this.modalAbierto.set(false); }
 
-  onTareaCreada() {
-    this.tareasService
-      .obtenerTodasLasTareas(this.idEspacio())
-      .subscribe((data) => this.tareas.set(data));
-  }
+  onTareaCreada() { this.cargarTareas(); }
 
   porEmpezar = computed(() => this.tareas().filter((t) => t.estadosTarea === 0).length);
   enProgreso = computed(() => this.tareas().filter((t) => t.estadosTarea === 1).length);
