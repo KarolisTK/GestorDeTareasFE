@@ -15,10 +15,12 @@ export class EditarTareaModal implements OnInit {
 
   cerrar         = output<void>();
   tareaEditada   = output<void>();
+  tareaPriorizada =output<void>();
   tareaEliminada = output<void>();
 
   nombreTarea      = '';
   descripcionTarea = '';
+  fechaFin         = '';
   cargando         = false;
   error            = '';
 
@@ -64,6 +66,28 @@ export class EditarTareaModal implements OnInit {
         this.error    = 'Error al editar la tarea.';
         console.error(err);
       },
+    });
+  }
+
+  QuitarPrioridad(){
+    const t = this.tarea();
+    this.tareaService.QuitarPrioridad(
+    {
+        nombreTarea:        t.nombreTarea,
+        descripcionTarea:   t.descripcionTarea,
+        fechaCreacionTarea: t.fechaCreacionTarea,
+        estadosTarea:       t.estadosTarea,
+        estaEliminado:      t.estaEliminado,
+        tiposTarea:         t.tiposTarea,
+        idUsuarioDeLaTarea: t.idUsuarioDeLaTarea,
+        idEspacioDeTrabajo: t.espacioDeTrabajoId,
+        tienePrioridad:     false,
+        fechaLimite:        t.fechaCreacionTarea
+      },t.idTarea
+    ).subscribe({
+      next: () => {
+        this.tareaEditada.emit();
+      }
     });
   }
 

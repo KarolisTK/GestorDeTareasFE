@@ -4,6 +4,7 @@ import { ObtenerTareas } from '../models/obtener-tareas';
 import { CrearTarea } from '../models/crear-Tarea';
 import { Observable } from 'rxjs';
 import { EditarTarea } from '../models/editar-tarea';
+import { CrearTareaUrgente } from '../models/crear-tarea-urgente';
 
 @Injectable({
   providedIn: 'root',
@@ -21,11 +22,19 @@ export class TareasService {
   AniadirNuevaTarea(dto: CrearTarea): Observable<any> {
     return this.http.post(`${this.baseUrl}/Tareas/CrearTarea`, dto);
   }
-
   EditarTarea(dto: EditarTarea, idTarea: number) {
     return this.http.put(`${this.baseUrl}/Tareas/EditarTarea/${idTarea}`, dto);
   }
-  EliminarTarea(idTarea: number){
+  EliminarTarea(idTarea: number) {
     return this.http.delete(`${this.baseUrl}/Tareas/EliminarTarea/${idTarea}`);
+  }
+  PriorizarTarea(dto: CrearTareaUrgente, idTarea: number): Observable<any> {
+    return this.http.put(`${this.baseUrl}/TareasUrgentes/PriorizarTarea/${idTarea}`, dto);
+  }
+  QuitarPrioridad(dto: CrearTareaUrgente, idTarea: number): Observable<any> {
+    return this.http.put(`${this.baseUrl}/TareasUrgentes/QuitarPrioridad/${idTarea}`, dto);
+  }
+  CrearTareaUrgente(dto: CrearTareaUrgente): Observable<any> {
+    return this.http.post(`${this.baseUrl}/TareasUrgentes/CrearTareaUrgente`, dto);
   }
 }
