@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { ObtenerDatosDeAmigoPorFriendTag } from '../models/obtener-datos-de-amigo-por-friend-tag';
+import { ListarAmigos } from '../models/listar-amigos';
 
 @Injectable({
   providedIn: 'root',
@@ -14,10 +15,9 @@ export class AmigosService {
       `${this.baseUrl}/Usuarios/EncontrarAmigoPorFriendTag/${friendTag}`,
     );
   }
-  EnviarSolicitudAmistad(idUsuarioReceptor: number, tipoSolicitud: number) {
-    return this.http.post(
-      `${this.baseUrl}/Usuarios/EnviarSolicitud/${idUsuarioReceptor}/${tipoSolicitud}`,
-      null,
+  ListarTodosLosAmigos(){
+        return this.http.get<ListarAmigos[]>(
+      `${this.baseUrl}/Usuarios/ListarTodosLosAmigos`,
     );
   }
 }

@@ -2,6 +2,7 @@ import { Component, inject, input, output, signal } from '@angular/core';
 import { AmigosService } from '../../../services/amigos-service';
 import { ObtenerDatosDeAmigoPorFriendTag } from '../../../models/obtener-datos-de-amigo-por-friend-tag';
 import { FormsModule } from '@angular/forms';
+import { NotificacionesService } from '../../../services/notificaciones-service';
 
 @Component({
   selector: 'app-buscar-amigo-modal',
@@ -21,6 +22,7 @@ export class BuscarAmigoModal {
   error = '';
 
   private amigoService = inject(AmigosService);
+  private solicitudesService = inject(NotificacionesService)
 
   onOverlayClick(event: MouseEvent) {
     console.log('target:', (event.target as HTMLElement).className);
@@ -56,7 +58,7 @@ export class BuscarAmigoModal {
     });
   }
   onAnadirAmigo() {
-    this.amigoService
+    this.solicitudesService
       .EnviarSolicitudAmistad(this.idAmigo, this.tipoSolicitud_SolicitudAmistad)
       .subscribe({
         next: () => {

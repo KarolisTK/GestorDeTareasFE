@@ -50,12 +50,51 @@
 
         @if (notificacionesAbiertas()) {
           <div
-            class="absolute right-0 top-11 w-72 bg-zinc-900 border border-zinc-700 rounded-xl shadow-xl z-50 p-4 flex flex-col gap-2"
+            class="absolute right-0 top-11 w-72 bg-zinc-900 border border-zinc-700 rounded-xl shadow-xl z-50 p-4 flex flex-col gap-3"
           >
-            <p class="text-zinc-400 text-xs font-medium uppercase tracking-wider mb-1">
-              Notificaciones
-            </p>
-            <div class="text-zinc-500 text-sm text-center py-4">Sin notificaciones por ahora</div>
+            <p class="text-zinc-400 text-xs font-medium uppercase tracking-wider">Notificaciones</p>
+
+            @if (solicitudes.length === 0) {
+              <div class="text-zinc-500 text-sm text-center py-4">Sin notificaciones por ahora</div>
+            }
+
+            @for (solicitud of solicitudes(); track solicitud.idSolicitud) {
+              <div class="bg-zinc-800 rounded-lg p-3 flex flex-col gap-2">
+                <div class="flex items-center gap-2">
+                  <div
+                    class="size-7 rounded-full bg-amber-500/20 flex items-center justify-center text-amber-300 text-xs font-semibold shrink-0"
+                  >
+                    {{ solicitud.nombreSolicitante[0].toUpperCase() }}
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <p class="text-white text-xs font-medium truncate">
+                      {{ solicitud.nombreSolicitante }}
+                    </p>
+                    @if (solicitud.tiposSolicitudes === 0) {
+                      <p class="text-zinc-400 text-xs">Solicitud de amistad</p>
+                    }
+                    @if (solicitud.tiposSolicitudes === 1) {
+                      <p class="text-zinc-400 text-xs">Solicitud de espacio de trabajo</p>
+                    }
+                  </div>
+                </div>
+
+                <div class="flex gap-2">
+                  <button
+                    (click)="aceptarSolicitud(solicitud.idSolicitud)"
+                    class="flex-1 px-2 py-1 text-xs bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/30 rounded-lg transition-colors"
+                  >
+                    Aceptar
+                  </button>
+                  <button
+                    (click)="rechazarSolicitud(solicitud.idSolicitud)"
+                    class="flex-1 px-2 py-1 text-xs bg-red-500/20 hover:bg-red-500/30 text-red-400 border border-red-500/30 rounded-lg transition-colors"
+                  >
+                    Rechazar
+                  </button>
+                </div>
+              </div>
+            }
           </div>
         }
       </div>
@@ -95,6 +134,7 @@
               <i class="ti ti-user text-base"></i> Mi perfil
             </button>
             <button
+              (click)="mostrarAmigosAbierto.set(true)"
               class="flex items-center gap-2 px-4 py-2 text-sm text-zinc-300 hover:bg-zinc-800 transition-colors"
             >
               <i class="ti ti-users text-base"></i> Mis amigos
@@ -120,6 +160,11 @@
           (cerrar)="buscarAmigoAbierto.set(false)"
           (amigoEncontrado)="onAmigoEncontrado($event)"
         />
+      }
+      @if (mostrarAmigosAbierto()) {
+        <app-listar-amigos-modal
+        [amigos]="amigos()"
+        (cerrar)="mostrarAmigosAbierto.set(false)" />
       }
     </div>
   </header>

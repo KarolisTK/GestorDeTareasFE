@@ -1,0 +1,29 @@
+import { HttpClient } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
+import { Solicitudes } from '../models/solicitudes';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class NotificacionesService {
+  private http = inject(HttpClient);
+  private baseUrl = 'https://localhost:44380/api';
+
+  ObtenerSolicitudesDeAmistad() {
+    return this.http.get<Solicitudes[]>(`${this.baseUrl}/Usuarios/ListarSolicitudesDeAmistad`);
+  }
+
+  EnviarSolicitudAmistad(idUsuarioReceptor: number, tipoSolicitud: number) {
+    return this.http.post(
+      `${this.baseUrl}/Usuarios/EnviarSolicitud/${idUsuarioReceptor}/${tipoSolicitud}`,
+      null,
+    );
+  }
+
+  TramitarSolicitudAmistad(idSolicitud: number, resolucionSolicitud: number) {
+    return this.http.post<void>(
+      `${this.baseUrl}/Usuarios/TramitarSolicitud/${idSolicitud}/${resolucionSolicitud}`,
+      null,
+    );
+  }
+}
