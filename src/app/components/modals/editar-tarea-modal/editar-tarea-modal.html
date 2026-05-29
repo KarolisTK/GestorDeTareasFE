@@ -1,0 +1,70 @@
+<div
+  class="modal-overlay fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+  (click)="onOverlayClick($event)"
+>
+  <div class="bg-zinc-900 border border-zinc-700 rounded-xl w-full max-w-md mx-4 p-6 shadow-xl">
+    <div class="flex items-center justify-between mb-5">
+      <h2 class="text-white font-semibold text-lg">Editar tarea</h2>
+      <button (click)="cerrar.emit()" class="text-zinc-400 hover:text-white transition-colors">
+        ✕
+      </button>
+    </div>
+
+    <div class="flex flex-col gap-4">
+      <div class="flex flex-col gap-1">
+        <label class="text-zinc-400 text-sm">Nombre <span class="text-amber-400">*</span></label>
+        <input
+          [(ngModel)]="nombreTarea"
+          type="text"
+          class="bg-zinc-800 border border-zinc-700 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-amber-500 placeholder:text-zinc-500"
+        />
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label class="text-zinc-400 text-sm">Descripción</label>
+        <textarea
+          [(ngModel)]="descripcionTarea"
+          rows="3"
+          class="bg-zinc-800 border border-zinc-700 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-amber-500 placeholder:text-zinc-500 resize-none"
+        ></textarea>
+      </div>
+
+      @if (error) {
+        <p class="text-red-400 text-xs">{{ error }}</p>
+      }
+
+      <div class="flex justify-end gap-2 mt-1">
+        <button
+          (click)="cerrar.emit()"
+          class="px-4 py-2 text-sm text-zinc-400 hover:text-white transition-colors"
+        >
+          Cancelar
+        </button>
+        @if (tarea().tienePrioridad) {
+          <button
+            (click)="QuitarPrioridad()"
+            [disabled]="cargando"
+            class="px-4 py-2 text-sm bg-red-500/20 hover:bg-red-500/30 text-red-400 font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Quitar prioridad
+          </button>
+        }
+
+        <button
+          (click)="onEliminar()"
+          [disabled]="cargando"
+          class="px-4 py-2 text-sm bg-red-500/20 hover:bg-red-500/30 text-red-400 font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          Eliminar
+        </button>
+        <button
+          (click)="onSubmit()"
+          [disabled]="cargando"
+          class="px-4 py-2 text-sm bg-amber-500 hover:bg-amber-400 text-black font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {{ cargando ? 'Guardando...' : 'Guardar cambios' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

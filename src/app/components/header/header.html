@@ -1,0 +1,211 @@
+<div class="bg-amber-950 h-screen flex flex-col overflow-hidden">
+  <header
+    class="flex items-center h-14 px-4 sm:px-6 bg-transparent border-b border-amber-800/30 shrink-0"
+  >
+    <div class="flex-1">
+      @if (rutaActual() !== '/workspaces') {
+        <button
+          (click)="vueltaAtras()"
+          class="flex items-center text-amber-500 hover:text-amber-300 text-sm transition-colors"
+        >
+          <svg
+            class="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+          </svg>
+          Volver
+        </button>
+      }
+    </div>
+
+    <span class="text-sm font-medium tracking-tight text-amber-200">
+      Just<span class="text-amber-600 font-normal">One</span>Step
+    </span>
+
+    <div class="flex-1 flex items-center justify-end gap-1">
+      <div class="relative">
+        <button
+          (click)="notificacionesAbiertas.set(!notificacionesAbiertas())"
+          class="relative size-9 flex items-center justify-center rounded-lg border border-amber-800/40 text-amber-500 hover:bg-amber-900/50 hover:text-amber-300 transition-colors"
+        >
+          <svg
+            class="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z"
+            />
+          </svg>
+
+          @if (solicitudes().length > 0 || notifiaciones().length > 0) {
+            <span class="absolute top-1.5 right-1.5 size-1.5 rounded-full bg-orange-500"></span>
+          }
+        </button>
+
+        @if (notificacionesAbiertas()) {
+          <div
+            class="absolute right-0 top-11 w-80 bg-zinc-900 border border-zinc-700 rounded-xl shadow-xl z-50 overflow-hidden"
+          >
+            <div class="px-4 py-3 border-b border-zinc-800">
+              <p class="text-zinc-400 text-xs font-medium uppercase tracking-wider">
+                Notificaciones
+              </p>
+            </div>
+
+            @if (solicitudes().length === 0 && notifiaciones().length === 0) {
+              <div class="text-zinc-500 text-sm text-center py-8">Sin notificaciones por ahora</div>
+            }
+
+            <div class="flex flex-col max-h-96 overflow-y-auto">
+              @for (solicitud of solicitudes(); track solicitud.idSolicitud) {
+                <div
+                  class="px-4 py-3 border-b border-zinc-800 last:border-0 hover:bg-zinc-800/50 transition-colors"
+                >
+                  <div class="flex items-center gap-3 mb-3">
+                    <div
+                      class="size-8 rounded-full bg-amber-500/20 flex items-center justify-center text-amber-300 text-xs font-semibold shrink-0"
+                    >
+                      {{ solicitud.nombreSolicitante[0].toUpperCase() }}
+                    </div>
+                    <div class="flex-1 min-w-0">
+                      <p class="text-white text-xs font-medium truncate">
+                        {{ solicitud.nombreSolicitante }}
+                      </p>
+                      @if (solicitud.tiposSolicitudes === 0) {
+                        <p class="text-zinc-500 text-xs">Solicitud de amistad</p>
+                      }
+                      @if (solicitud.tiposSolicitudes === 1) {
+                        <p class="text-zinc-500 text-xs">Solicitud de espacio de trabajo</p>
+                      }
+                    </div>
+                  </div>
+                  <div class="flex gap-2">
+                    <button
+                      (click)="aceptarSolicitud(solicitud.idSolicitud)"
+                      class="flex-1 py-1.5 text-xs bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/30 rounded-lg transition-colors"
+                    >
+                      Aceptar
+                    </button>
+                    <button
+                      (click)="rechazarSolicitud(solicitud.idSolicitud)"
+                      class="flex-1 py-1.5 text-xs bg-red-500/15 hover:bg-red-500/25 text-red-400 border border-red-500/30 rounded-lg transition-colors"
+                    >
+                      Rechazar
+                    </button>
+                  </div>
+                </div>
+              }
+
+              @for (notificacion of notifiaciones(); track notificacion.idNotificacion) {
+                <div
+                  class="px-4 py-3 border-b border-zinc-800 last:border-0 hover:bg-zinc-800/50 transition-colors group"
+                >
+                  <div class="flex items-start justify-between gap-3">
+                    <div class="flex items-start gap-3">
+                      <div class="size-2 rounded-full bg-amber-400 shrink-0 mt-1.5"></div>
+                      <p class="text-zinc-300 text-xs leading-relaxed">
+                        {{ notificacion.tituloNotificacion }}
+                      </p>
+                    </div>
+                    <button
+                      (click)="marcarNotificacionComoLeida(notificacion.idNotificacion)"
+                      class="shrink-0 px-2 py-1 text-xs text-zinc-500 hover:text-amber-300 hover:bg-amber-500/10 border border-transparent hover:border-amber-500/30 rounded-lg transition-all opacity-0 group-hover:opacity-100"
+                    >
+                      ✓ Leído
+                    </button>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        }
+      </div>
+
+      <div class="relative">
+        <button
+          (click)="ajustesAbiertos.set(!ajustesAbiertos())"
+          class="size-9 flex items-center justify-center rounded-lg border border-amber-800/40 text-amber-500 hover:bg-amber-900/50 hover:text-amber-300 transition-colors"
+        >
+          <svg
+            class="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z"
+            />
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+            />
+          </svg>
+        </button>
+
+        @if (ajustesAbiertos()) {
+          <div
+            class="absolute right-0 top-11 w-56 bg-zinc-900 border border-zinc-700 rounded-xl shadow-xl z-50 py-2 flex flex-col"
+          >
+            <button
+              (click)="copiarFriendTag()"
+              title="Click para copiar"
+              class="flex items-center gap-2 px-4 py-2 text-sm text-zinc-300 hover:bg-zinc-800 transition-colors"
+            >
+              <i class="ti ti-user text-base"></i>
+              <span>Mi friendTag: </span>
+              <span class="text-amber-500 hover:text-amber-300 text-sm">{{
+                datosUsuario()?.friendTag
+              }}</span>
+              <i class="ti ti-copy text-xs text-zinc-500"></i>
+            </button>
+            <button
+              (click)="mostrarAmigosAbierto.set(true)"
+              class="flex items-center gap-2 px-4 py-2 text-sm text-zinc-300 hover:bg-zinc-800 transition-colors"
+            >
+              <i class="ti ti-users text-base"></i> Mis amigos
+            </button>
+            <button
+              (click)="buscarAmigoAbierto.set(true)"
+              class="flex items-center gap-2 px-4 py-2 text-sm text-zinc-300 hover:bg-zinc-800 transition-colors"
+            >
+              <i class="ti ti-user-search text-base"></i> Buscar amigos
+            </button>
+            <div class="border-t border-zinc-700 my-1"></div>
+            <button
+              (click)="CerrarSesion()"
+              class="flex items-center gap-2 px-4 py-2 text-sm text-red-400 hover:bg-zinc-800 transition-colors"
+            >
+              <i class="ti ti-logout text-base"></i> Cerrar sesión
+            </button>
+          </div>
+        }
+      </div>
+      @if (buscarAmigoAbierto()) {
+        <app-buscar-amigo-modal
+          (cerrar)="buscarAmigoAbierto.set(false)"
+          (amigoEncontrado)="onAmigoEncontrado($event)"
+        />
+      }
+      @if (mostrarAmigosAbierto()) {
+        <app-listar-amigos-modal [amigos]="amigos()" (cerrar)="mostrarAmigosAbierto.set(false)" />
+      }
+    </div>
+  </header>
+
+  <div class="flex-1 overflow-hidden">
+    <router-outlet />
+  </div>
+</div>
