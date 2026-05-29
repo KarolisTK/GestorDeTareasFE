@@ -10,7 +10,7 @@ interface LoginResponse {
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private http    = inject(HttpClient);
-  private baseUrl = 'https://localhost:44380/api';
+  private baseUrl = 'https://gestordetareasapi.dekarolis.com/api';
 
   private _token = signal<string | null>(this.cargarToken());
 

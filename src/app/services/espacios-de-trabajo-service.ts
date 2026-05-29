@@ -8,7 +8,7 @@ import { CrearNuevoEspacioDeTrabajo } from '../models/crear-nuevo-espacio-de-tra
 })
 export class EspaciosDeTrabajoService {
   private http = inject(HttpClient);
-  private baseUrl = 'https://localhost:44380/api';
+  private baseUrl = 'https://gestordetareasapi.dekarolis.com/api';
   espaciosDeTrabajo = signal<MostrarEspaciosDeTrabajo[]>([]);
   tipoSolicitudInvitacionEspacioTreabajo = 1;
 

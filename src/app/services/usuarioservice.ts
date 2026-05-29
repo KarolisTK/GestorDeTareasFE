@@ -8,7 +8,7 @@ import { ObtenerDatosUsuarioLogueado } from '../models/obtener-datos-usuario-log
 })
 export class Usuarioservice {
   private http = inject(HttpClient);
-  private baseUrl = "https://localhost:44380/api";
+  private baseUrl = "https://gestordetareasapi.dekarolis.com/api";
 
 
   crear(dto: CrearUsuario){

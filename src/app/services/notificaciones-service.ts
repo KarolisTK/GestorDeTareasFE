@@ -8,7 +8,7 @@ import { ListarNotificaciones } from '../models/listar-notificaciones';
 })
 export class NotificacionesService {
   private http = inject(HttpClient);
-  private baseUrl = 'https://localhost:44380/api';
+  private baseUrl = 'https://gestordetareasapi.dekarolis.com/api';
 
   ObtenerSolicitudesDeAmistad() {
     return this.http.get<Solicitudes[]>(`${this.baseUrl}/Usuarios/ListarSolicitudesDeAmistad`);

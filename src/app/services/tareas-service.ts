@@ -11,7 +11,7 @@ import { CrearTareaUrgente } from '../models/crear-tarea-urgente';
 })
 export class TareasService {
   private http = inject(HttpClient);
-  private baseUrl = 'https://localhost:44380/api';
+  private baseUrl = 'https://gestordetareasapi.dekarolis.com/api';
 
   obtenerTodasLasTareas(idEspacioDeTrabajo: number) {
     return this.http.get<ObtenerTareas[]>(

@@ -8,7 +8,7 @@ import { ListarAmigos } from '../models/listar-amigos';
 })
 export class AmigosService {
   private http = inject(HttpClient);
-  private baseUrl = 'https://localhost:44380/api';
+  private baseUrl = 'https://gestordetareasapi.dekarolis.com/api';
 
   ObtenerAmigoPorFriendTag(friendTag: string) {
     return this.http.get<ObtenerDatosDeAmigoPorFriendTag>(

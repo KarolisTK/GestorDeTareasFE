@@ -1,8 +1,10 @@
 import { Component, inject } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { Usuarioservice } from '../../services/usuarioservice';
 import { CrearUsuario } from '../../models/crear-usuario';
+import { AuthService } from '../../services/auth-service';
+import { ToastService } from '../../services/toast-service';
 
 @Component({
   selector: 'app-registro',
@@ -11,17 +13,34 @@ import { CrearUsuario } from '../../models/crear-usuario';
 })
 export class RegistroComponent {
   private usuarioService = inject(Usuarioservice);
+  private authService = inject(AuthService);
+  private toast = inject(ToastService);
+  private router = inject(Router);
 
   dto: CrearUsuario = {
-    nombreUsuario:    '',
-    correoUsuario:    '',
+    nombreUsuario: '',
+    correoUsuario: '',
     contrasenaUsuario: '',
   };
 
   onSubmit() {
     this.usuarioService.crear(this.dto).subscribe({
-      next: (res) => console.log('Registrado:', res),
-      error: (err) => console.error('Error:', err),
+      next: () => {
+        this.authService.login(this.dto.correoUsuario, this.dto.contrasenaUsuario).subscribe({
+          next: () => {
+            this.toast.success('Te has registrado correctamente');
+            this.router.navigate(['/workspaces']);
+          },
+          error: () => this.toast.error('Registro correcto pero no se pudo iniciar sesión'),
+        });
+      },
+      error: (err) => {
+        if (err.status === 409) {
+          this.toast.error('El correo ya está registrado');
+        } else {
+          this.toast.error('Algo salió mal.');
+        }
+      },
     });
   }
 }
