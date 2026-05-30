@@ -1,4 +1,4 @@
-<div class="bg-amber-950 h-screen flex flex-col overflow-hidden">
+<div class="bg-amber-950 min-h-screen flex flex-col md:overflow-hidden">
   <header
     class="flex items-center h-14 px-4 sm:px-6 bg-transparent border-b border-amber-800/30 shrink-0"
   >
@@ -53,7 +53,7 @@
 
         @if (notificacionesAbiertas()) {
           <div
-            class="absolute right-0 top-11 w-80 bg-zinc-900 border border-zinc-700 rounded-xl shadow-xl z-50 overflow-hidden"
+            class="absolute right-0 top-11 md:w-80 w-72 bg-zinc-900 border border-zinc-700 rounded-xl shadow-xl z-50 md:overflow-hidden"
           >
             <div class="px-4 py-3 border-b border-zinc-800">
               <p class="text-zinc-400 text-xs font-medium uppercase tracking-wider">
@@ -205,7 +205,7 @@
     </div>
   </header>
 
-  <div class="flex-1 overflow-hidden">
+  <div class="flex-1 md:overflow-hidden">
     <router-outlet />
   </div>
 </div>

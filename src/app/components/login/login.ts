@@ -11,6 +11,7 @@ import { ToastService } from '../../services/toast-service';
   styleUrl: './login.css',
 })
 export class Login {
+  cargando = false;
   private router = inject(Router);
   private authService = inject(AuthService);
   private toast = inject(ToastService);
@@ -19,11 +20,13 @@ export class Login {
   contrasena = '';
 
   onSubmit() {
+    this.cargando = true;
     this.authService.login(this.correo, this.contrasena).subscribe({
       next: (res) => {
         this.toast.success('Se ha iniciado sesión');
         localStorage.setItem('token', res.token);
         this.router.navigate(['/workspaces']);
+        this.cargando = false
       },
       error: (err) => {
         if (err.status === 401) {
@@ -31,6 +34,7 @@ export class Login {
         } else {
           this.toast.error('Error en el inicio de sesión');
         }
+        this.cargando = false
       },
     });
   }
